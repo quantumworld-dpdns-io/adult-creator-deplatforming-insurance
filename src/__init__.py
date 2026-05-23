@@ -17,3 +17,5 @@
 # commit-036: add src/security/cli/__init__.py
 
 # commit-037: add tests/__init__.py
+
+# commit-038: add tests/unit/__init__.py
