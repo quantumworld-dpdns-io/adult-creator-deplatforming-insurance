@@ -1207,3 +1207,5 @@
 # commit-068: add PR template
 
 # commit-069: add FUNDING.yml
+
+# commit-071: add SUPPORT.md
