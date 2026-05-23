@@ -1201,3 +1201,5 @@
 <!-- commit-063: create quantum/algorithms.md -->
 
 # commit-066: add issue template for bugs
+
+# commit-067: add issue template for features
