@@ -129,10 +129,11 @@ class MockKyberKEM(PQCKEM):
     def encapsulate(self, public_key: bytes) -> Tuple[bytes, bytes]:
         if len(public_key) != self.public_key_length:
             raise ValueError(f"Invalid public key length: expected {self.public_key_length}, got {len(public_key)}")
+        pk_hash = hashlib.shake_256(public_key).digest(32)
         shared_secret = os.urandom(self.shared_secret_length)
-        mask = hashlib.shake_256(public_key).digest(self.shared_secret_length)
+        mask = hashlib.shake_256(pk_hash).digest(self.shared_secret_length)
         embedded = bytes(s ^ m for s, m in zip(shared_secret, mask))
-        rest = hashlib.shake_256(public_key + embedded).digest(self.ciphertext_length - self.shared_secret_length)
+        rest = hashlib.shake_256(pk_hash + embedded).digest(self.ciphertext_length - self.shared_secret_length)
         ciphertext = embedded + rest
         logger.debug(f"Encapsulated: CT={len(ciphertext)}B, SS={len(shared_secret)}B")
         return ciphertext, shared_secret
@@ -145,8 +146,7 @@ class MockKyberKEM(PQCKEM):
         pk_hash = private_key[:32]
         embedded = ciphertext[:self.shared_secret_length]
         mask = hashlib.shake_256(pk_hash).digest(self.shared_secret_length)
-        mask2 = hashlib.shake_256(pk_hash + b"alt").digest(self.shared_secret_length)
-        shared_secret = bytes(e ^ m ^ m2 for e, m, m2 in zip(embedded, mask, mask2))
+        shared_secret = bytes(e ^ m for e, m in zip(embedded, mask))
         return shared_secret
 
     @property
