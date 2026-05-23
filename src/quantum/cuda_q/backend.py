@@ -49,3 +49,5 @@ class CUDABackend:
     def shutdown(self):
         self.initialized = False
         logger.info("CUDA-Q backend shut down")
+
+# commit-015: create src/quantum/cuda_q/ subpackage
