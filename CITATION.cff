@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+title: Adult Creator Deplatforming Insurance
+message: "Please cite this software as:"
+type: software
+authors:
+  - name: "quantumworld-dpdns-io"
+    email: dev@quantumworld.io
+repository-code: "https://github.com/quantumworld-dpdns-io/adult-creator-deplatforming-insurance"
+abstract: "Quantum-powered insurance risk scoring with post-quantum cryptography and OWASP security testing."
+keywords:
+  - quantum computing
+  - risk scoring
+  - post-quantum cryptography
+  - insurance
+  - security
+license: MIT
+version: 1.0.0
+date-released: 2026-05-23
