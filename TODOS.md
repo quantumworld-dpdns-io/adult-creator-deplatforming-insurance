@@ -1161,3 +1161,5 @@
 # commit-011: create src/quantum/ package directory
 
 # commit-013: create src/quantum/algorithms/ subpackage
+
+# commit-016: create src/quantum/utils/ subpackage
