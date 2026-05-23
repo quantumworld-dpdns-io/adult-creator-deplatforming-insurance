@@ -1235,3 +1235,5 @@
 # commit-089: add dependency security scanning
 
 # commit-090: add artifact archiving
+
+# commit-091: add flake8 configuration
