@@ -1241,3 +1241,5 @@
 # commit-092: add mypy type checking config
 
 # commit-093: add isort configuration
+
+# commit-094: add black formatting config
