@@ -1203,3 +1203,5 @@
 # commit-066: add issue template for bugs
 
 # commit-067: add issue template for features
+
+# commit-068: add PR template
