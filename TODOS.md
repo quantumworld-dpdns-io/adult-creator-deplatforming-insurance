@@ -1183,3 +1183,5 @@
 <!-- commit-052: create docs/index.md as documentation homepage -->
 
 <!-- commit-053: create getting-started.md quickstart guide -->
+
+<!-- commit-055: add API documentation structure -->
