@@ -1155,3 +1155,5 @@
 1050 | chore: final documentation review
 
 # commit-001: initialize python project structure with src layout
+
+# commit-007: create requirements.txt for core dependencies
