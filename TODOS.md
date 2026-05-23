@@ -1205,3 +1205,5 @@
 # commit-067: add issue template for features
 
 # commit-068: add PR template
+
+# commit-069: add FUNDING.yml
