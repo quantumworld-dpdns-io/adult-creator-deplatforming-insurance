@@ -1185,3 +1185,5 @@
 <!-- commit-053: create getting-started.md quickstart guide -->
 
 <!-- commit-055: add API documentation structure -->
+
+<!-- commit-056: add quantum computing overview page -->
