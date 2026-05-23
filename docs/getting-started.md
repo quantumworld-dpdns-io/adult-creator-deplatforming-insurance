@@ -1,4 +1,4 @@
-# contributing
+# getting-started
 
 > Part of the adult-creator-deplatforming-insurance documentation.
 
