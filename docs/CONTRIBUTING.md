@@ -77,3 +77,5 @@ Releases follow semantic versioning (MAJOR.MINOR.PATCH):
 2. Tag with version `v1.x.x`
 3. CI/CD pipeline builds and publishes packages
 4. Changelog auto-generated from commits
+
+<!-- commit-054: create contributing.md developer guide -->
