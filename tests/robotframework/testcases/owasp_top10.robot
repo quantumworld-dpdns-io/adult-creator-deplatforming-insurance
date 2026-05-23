@@ -109,3 +109,5 @@ A05-Security Misconfiguration - CORS
     Log    CORS test passed
 
 <!-- commit-061: add OWASP top 10 security reference -->
+
+# commit-088: add OWASP security test execution
