@@ -29,12 +29,11 @@ dependencies = [
     "numpy>=1.24.0",
     "scipy>=1.10.0",
 ]
-optional-dependencies = {
-    "quantum": ["qiskit>=0.45.0", "cudaq>=0.5.0"],
-    "test": ["robotframework>=6.0", "pytest>=7.0"],
-    "dev": ["flake8", "black", "isort", "mypy"],
-    "all": ["qiskit>=0.45.0", "cudaq>=0.5.0", "robotframework>=6.0"],
-}
+[project.optional-dependencies]
+quantum = ["qiskit>=0.45.0", "cudaq>=0.5.0"]
+test = ["robotframework>=6.0", "pytest>=7.0"]
+dev = ["flake8", "black", "isort", "mypy"]
+all = ["qiskit>=0.45.0", "cudaq>=0.5.0", "robotframework>=6.0"]
 
 [project.urls]
 "Homepage" = "https://github.com/quantumworld-dpdns-io/adult-creator-deplatforming-insurance"
