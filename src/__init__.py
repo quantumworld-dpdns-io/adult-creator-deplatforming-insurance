@@ -9,3 +9,5 @@
 # commit-032: add src/quantum/utils/__init__.py
 
 # commit-033: add src/security/__init__.py
+
+# commit-034: add src/security/pqc/__init__.py
