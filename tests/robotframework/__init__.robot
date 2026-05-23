@@ -9,3 +9,5 @@ Library           OperatingSystem
 Resource          resources/common_keywords.robot
 Resource          resources/quantum_keywords.robot
 Resource          resources/security_keywords.robot
+
+# commit-024: create tests/robotframework/ test directory
