@@ -256,3 +256,5 @@ def demo_pqc_kem():
 
 if __name__ == "__main__":
     demo_pqc_kem()
+
+<!-- commit-065: create PQC kem and signatures reference -->
