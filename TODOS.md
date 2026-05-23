@@ -1191,3 +1191,5 @@
 <!-- commit-057: add PQC overview page -->
 
 <!-- commit-058: add security overview page -->
+
+<!-- commit-059: add CI/CD workflows documentation -->
