@@ -1181,3 +1181,5 @@
 # commit-025: create docs/ documentation directory structure
 
 <!-- commit-052: create docs/index.md as documentation homepage -->
+
+<!-- commit-053: create getting-started.md quickstart guide -->
