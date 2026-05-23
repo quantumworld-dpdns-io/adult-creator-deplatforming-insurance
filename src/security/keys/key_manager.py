@@ -25,8 +25,8 @@ class QuantumKeyManager:
         key_entry = {
             "key_id": key_id,
             "purpose": purpose,
-            "created": datetime.utcnow().isoformat(),
-            "expires": (datetime.utcnow() + timedelta(days=365)).isoformat(),
+            "created": datetime.now(timezone.utc).isoformat(),
+            "expires": (datetime.now(timezone.utc) + timedelta(days=365)).isoformat(),
             "kem_algorithm": self.kem.algorithm_name,
             "kem_public_key": base64.b64encode(kem_pk).decode(),
             "kem_private_key": base64.b64encode(kem_sk).decode(),
