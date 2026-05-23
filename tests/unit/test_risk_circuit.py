@@ -20,8 +20,8 @@ class TestRiskScoringCircuit(unittest.TestCase):
 
     def test_risk_feature_circuit_too_many_factors(self):
         factors = [0.1] * 20
-        result = self.circuit.create_risk_feature_circuit(factors)
-        self.assertEqual(len(result['initial_state']), 16)
+        with self.assertRaises(ValueError):
+            self.circuit.create_risk_feature_circuit(factors)
 
     def test_variational_layer(self):
         gates = self.circuit.create_variational_layer(depth=2)
