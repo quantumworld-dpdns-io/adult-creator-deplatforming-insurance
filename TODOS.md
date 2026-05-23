@@ -1167,3 +1167,5 @@
 # commit-017: create src/quantum/cli/ subpackage
 
 # commit-018: create src/security/ package directory
+
+# commit-019: create src/security/pqc/ subpackage
