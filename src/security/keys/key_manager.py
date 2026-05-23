@@ -4,7 +4,7 @@ import os
 import json
 import base64
 from typing import Dict, Tuple, Optional, Any
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import logging
 
 from ..pqc.kem import PQCKEMFactory, PQCKEM
