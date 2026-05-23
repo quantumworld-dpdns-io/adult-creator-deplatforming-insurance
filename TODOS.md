@@ -1245,3 +1245,5 @@
 # commit-094: add black formatting config
 
 # commit-095: add bandit security scanner config
+
+# commit-097: add safety dependency checker config
