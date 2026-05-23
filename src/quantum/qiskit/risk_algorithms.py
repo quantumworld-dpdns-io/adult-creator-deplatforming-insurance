@@ -426,3 +426,5 @@ if __name__ == "__main__":
     run_risk_scoring_example()
 
 # commit-014: create src/quantum/qiskit/ subpackage
+
+# commit-030: add src/quantum/qiskit/__init__.py with try/except
