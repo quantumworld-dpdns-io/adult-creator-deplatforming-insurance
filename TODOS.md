@@ -1193,3 +1193,5 @@
 <!-- commit-058: add security overview page -->
 
 <!-- commit-059: add CI/CD workflows documentation -->
+
+<!-- commit-060: add testing documentation -->
