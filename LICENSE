@@ -35,3 +35,5 @@ SOFTWARE.
 # commit-047: add pre-commit hook for toml validation
 
 # commit-048: add pre-commit hook for merge conflict check
+
+# commit-049: add pre-commit hook for private key detection
