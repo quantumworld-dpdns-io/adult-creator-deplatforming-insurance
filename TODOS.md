@@ -1247,3 +1247,5 @@
 # commit-095: add bandit security scanner config
 
 # commit-097: add safety dependency checker config
+
+# commit-098: configure ruff linter rules
