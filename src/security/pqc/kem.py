@@ -120,11 +120,9 @@ class MockKyberKEM(PQCKEM):
 
     def generate_keypair(self) -> Tuple[bytes, bytes]:
         public_key = os.urandom(self.public_key_length)
-        secret_seed = hashlib.shake_256(public_key).digest(16)
-        private_key = secret_seed + os.urandom(max(0, self.private_key_length - 16))
+        pk_hash = hashlib.shake_256(public_key).digest(32)
+        private_key = pk_hash + os.urandom(max(0, self.private_key_length - 32))
         private_key = private_key[:self.private_key_length]
-        # Store the public key hash that both sides can derive
-        self._pk_hash = hashlib.shake_256(public_key).digest(32)
         logger.debug(f"Generated keypair: PK={len(public_key)}B, SK={len(private_key)}B")
         return public_key, private_key
 
@@ -132,8 +130,10 @@ class MockKyberKEM(PQCKEM):
         if len(public_key) != self.public_key_length:
             raise ValueError(f"Invalid public key length: expected {self.public_key_length}, got {len(public_key)}")
         shared_secret = os.urandom(self.shared_secret_length)
-        ct_seed = hashlib.shake_256(public_key + shared_secret).digest(self.ciphertext_length)
-        ciphertext = ct_seed
+        mask = hashlib.shake_256(public_key).digest(self.shared_secret_length)
+        embedded = bytes(s ^ m for s, m in zip(shared_secret, mask))
+        rest = hashlib.shake_256(public_key + embedded).digest(self.ciphertext_length - self.shared_secret_length)
+        ciphertext = embedded + rest
         logger.debug(f"Encapsulated: CT={len(ciphertext)}B, SS={len(shared_secret)}B")
         return ciphertext, shared_secret
 
@@ -142,8 +142,11 @@ class MockKyberKEM(PQCKEM):
             raise ValueError(f"Invalid private key length: expected {self.private_key_length}, got {len(private_key)}")
         if len(ciphertext) != self.ciphertext_length:
             raise ValueError(f"Invalid ciphertext length: expected {self.ciphertext_length}, got {len(ciphertext)}")
-        pk_hash = hashlib.shake_256(private_key).digest(32) if not hasattr(self, '_pk_hash') else self._pk_hash
-        shared_secret = hashlib.shake_256(ciphertext + pk_hash).digest(self.shared_secret_length)
+        pk_hash = private_key[:32]
+        embedded = ciphertext[:self.shared_secret_length]
+        mask = hashlib.shake_256(pk_hash).digest(self.shared_secret_length)
+        mask2 = hashlib.shake_256(pk_hash + b"alt").digest(self.shared_secret_length)
+        shared_secret = bytes(e ^ m ^ m2 for e, m, m2 in zip(embedded, mask, mask2))
         return shared_secret
 
     @property
