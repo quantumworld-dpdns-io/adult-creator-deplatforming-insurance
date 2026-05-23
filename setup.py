@@ -8,3 +8,5 @@ setup(
     include_package_data=True,
     zip_safe=False,
 )
+
+# commit-006: add setup.py for backward compatibility
