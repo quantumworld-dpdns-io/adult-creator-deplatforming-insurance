@@ -1223,3 +1223,5 @@
 # commit-081: add pytest execution step
 
 # commit-082: add coverage report generation
+
+# commit-083: upload coverage to codecov
