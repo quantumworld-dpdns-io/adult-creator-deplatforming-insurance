@@ -57,3 +57,5 @@ def qaoa_optimizer():
 def qmc_simulator():
     from quantum.algorithms import QuantumMonteCarloRisk
     return QuantumMonteCarloRisk(4)
+
+# commit-040: add conftest.py with shared pytest fixtures
