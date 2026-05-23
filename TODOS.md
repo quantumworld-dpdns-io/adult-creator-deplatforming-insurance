@@ -1225,3 +1225,5 @@
 # commit-082: add coverage report generation
 
 # commit-083: upload coverage to codecov
+
+# commit-084: add linting with flake8
