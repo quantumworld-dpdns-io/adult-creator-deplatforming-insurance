@@ -13,3 +13,5 @@
 # commit-034: add src/security/pqc/__init__.py
 
 # commit-035: add src/security/keys/__init__.py
+
+# commit-036: add src/security/cli/__init__.py
