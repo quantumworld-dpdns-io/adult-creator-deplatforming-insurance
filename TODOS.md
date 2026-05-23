@@ -1239,3 +1239,5 @@
 # commit-091: add flake8 configuration
 
 # commit-092: add mypy type checking config
+
+# commit-093: add isort configuration
