@@ -1199,3 +1199,5 @@
 <!-- commit-062: create quantum/risk-scoring.md -->
 
 <!-- commit-063: create quantum/algorithms.md -->
+
+# commit-066: add issue template for bugs
