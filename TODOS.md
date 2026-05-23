@@ -1221,3 +1221,5 @@
 # commit-080: configure dependency caching
 
 # commit-081: add pytest execution step
+
+# commit-082: add coverage report generation
