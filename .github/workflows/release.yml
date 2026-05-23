@@ -1,0 +1,223 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Pre-release'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  release-drafter:
+    name: Release Drafter
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      changelog: ${{ steps.changelog.outputs.changelog }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set version
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          fi
+      - name: Generate changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configuration: .github/release-drafter/config.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    name: Build Packages
+    runs-on: ubuntu-latest
+    needs: release-drafter
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install build wheel twine
+      - name: Build package
+        run: |
+          python -m build
+      - name: Verify package
+        run: |
+          twine check dist/*
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.python-version }}
+          path: dist/
+
+  sign-package:
+    name: Sign Package
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+      - name: Install signing tools
+        run: |
+          pip install sign
+      - name: Sign packages
+        run: |
+          for artifact in dist-*/; do
+            for file in "$artifact"/*.whl "$artifact"/*.tar.gz; do
+              if [ -f "$file" ]; then
+                gpg --detach-sign --armor "$file"
+              fi
+            done
+          done
+      - name: Upload signatures
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-signatures
+          path: dist-*/*.asc
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install security scanners
+        run: |
+          pip install bandit safety pip-audit
+      - name: Run Bandit security scan
+        run: |
+          bandit -r src/ -f json -o bandit-report.json || true
+      - name: Run pip-audit
+        run: |
+          pip-audit -r requirements-quantum.txt -r requirements-robot.txt || true
+      - name: Upload security report
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: bandit-report.json
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [build, sign-package, security-scan]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+      - name: Generate release notes
+        run: |
+          cat > release-notes.md << 'EOF'
+          # Release ${{ needs.release-drafter.outputs.version }}
+          
+          ## Changes
+          ${{ needs.release-drafter.outputs.changelog }}
+          
+          ## Installation
+          ```bash
+          pip install adult-creator-deplatforming-insurance
+          ```
+          
+          ## Quantum Computing Features
+          - Risk scoring with quantum algorithms (VQE, QAOA, Quantum Monte Carlo)
+          - Post-quantum cryptography (Kyber KEM, Dilithium signatures)
+          - Quantum entropy generation
+          
+          ## Security
+          - OWASP Top 10 security validation
+          - PQC integration for future-proof cryptography
+          
+          ## Changelog
+          ${{ needs.release-drafter.outputs.changelog }}
+          EOF
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.release-drafter.outputs.version }}
+          name: Release v${{ needs.release-drafter.outputs.version }}
+          body_path: release-notes.md
+          draft: false
+          prerelease: ${{ github.event.inputs.prerelease || false }}
+          files: |
+            release-artifacts/**/*.whl
+            release-artifacts/**/*.tar.gz
+            release-artifacts/**/*.asc
+            release-artifacts/**/*.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-pypi:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    needs: [build, sign-package, security-scan, create-release]
+    environment:
+      name: pypi
+      url: https://pypi.org/project/adult-creator-deplatforming-insurance
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ matrix.python-version }}
+          path: dist
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+  docker-build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: create-release
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:v${{ needs.release-drafter.outputs.version }}
+            ghcr.io/${{ github.repository }}:latest
+          labels: |
+            version=${{ needs.release-drafter.outputs.version }}
+            quantum=integrated
+            pqc=yes
