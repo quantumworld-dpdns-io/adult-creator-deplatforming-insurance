@@ -188,3 +188,5 @@ if __name__ == "__main__":
     print(f"Qubits: {circuit_spec['num_qubits']}")
     print(f"Initial State: {circuit_spec['initial_state']}")
     print(f"Number of Gates: {len(circuit_spec['gates'])}")
+
+# commit-012: create src/quantum/circuits/ subpackage
