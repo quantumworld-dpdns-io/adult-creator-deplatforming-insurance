@@ -1251,3 +1251,5 @@
 # commit-098: configure ruff linter rules
 
 # commit-099: add vscode workspace settings
+
+# commit-100: add vscode extension recommendations
