@@ -1179,3 +1179,5 @@
 # commit-023: create tests/integration/ test directory
 
 # commit-025: create docs/ documentation directory structure
+
+<!-- commit-052: create docs/index.md as documentation homepage -->
