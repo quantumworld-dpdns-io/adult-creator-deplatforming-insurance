@@ -1213,3 +1213,5 @@
 # commit-074: configure GitHub Discussions
 
 # commit-077: add python 3.10 test matrix
+
+# commit-078: add python 3.11 test matrix
