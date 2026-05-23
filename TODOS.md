@@ -1159,3 +1159,5 @@
 # commit-007: create requirements.txt for core dependencies
 
 # commit-011: create src/quantum/ package directory
+
+# commit-013: create src/quantum/algorithms/ subpackage
