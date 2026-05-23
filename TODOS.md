@@ -1157,3 +1157,5 @@
 # commit-001: initialize python project structure with src layout
 
 # commit-007: create requirements.txt for core dependencies
+
+# commit-011: create src/quantum/ package directory
