@@ -1243,3 +1243,5 @@
 # commit-093: add isort configuration
 
 # commit-094: add black formatting config
+
+# commit-095: add bandit security scanner config
