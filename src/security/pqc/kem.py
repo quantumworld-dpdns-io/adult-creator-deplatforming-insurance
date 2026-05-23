@@ -119,81 +119,29 @@ class MockKyberKEM(PQCKEM):
         self._shared_secret_length = params["ss"]
 
     def generate_keypair(self) -> Tuple[bytes, bytes]:
-        """
-        Generate a mock Kyber keypair.
-        
-        Returns:
-            Tuple of (public_key, private_key) as bytes
-        """
-        # Generate random keys of appropriate length
         public_key = os.urandom(self.public_key_length)
-        private_key = os.urandom(self.private_key_length)
-        
-        # In a real implementation, these would be mathematically related
-        # For mock, we just return random bytes
-        
+        private_key = public_key[:self.private_key_length]
+        if len(private_key) < self.private_key_length:
+            private_key = private_key + os.urandom(self.private_key_length - len(private_key))
         logger.debug(f"Generated keypair: PK={len(public_key)} bytes, SK={len(private_key)} bytes")
         return public_key, private_key
 
     def encapsulate(self, public_key: bytes) -> Tuple[bytes, bytes]:
-        """
-        Encapsulate a shared secret using the mock Kyber algorithm.
-        
-        Args:
-            public_key: Recipient's public key
-            
-        Returns:
-            Tuple of (ciphertext, shared_secret) as bytes
-        """
         if len(public_key) != self.public_key_length:
             raise ValueError(f"Invalid public key length: expected {self.public_key_length}, got {len(public_key)}")
-        
-        # Generate random shared secret
-        shared_secret = os.urandom(self.shared_secret_length)
-        
-        # Create ciphertext (in real Kyber, this involves polynomial operations)
-        # For mock, we create a ciphertext that combines the public key and shared secret
-        ciphertext = bytearray(self.ciphertext_length)
-        
-        # Simple mock encapsulation: hash public key and shared secret to create ciphertext
-        combined = public_key + shared_secret
-        hash_digest = hashlib.sha256(combined).digest()
-        
-        # Fill ciphertext with pseudo-random data based on the hash
-        for i in range(self.ciphertext_length):
-            ciphertext[i] = hash_digest[i % len(hash_digest)] ^ ((i + public_key[i % len(public_key)]) & 0xFF)
-        
-        logger.debug(f"Encapsulated shared secret: CT={len(ciphertext)} bytes, SS={len(shared_secret)} bytes")
-        return bytes(ciphertext), shared_secret
+        seed = os.urandom(16)
+        derived = hashlib.shake_256(public_key + seed).digest(self.shared_secret_length + self.ciphertext_length)
+        shared_secret = derived[:self.shared_secret_length]
+        ciphertext = derived[self.shared_secret_length:]
+        logger.debug(f"Encapsulated: CT={len(ciphertext)}B, SS={len(shared_secret)}B")
+        return ciphertext, shared_secret
 
     def decapsulate(self, private_key: bytes, ciphertext: bytes) -> bytes:
-        """
-        Decapsulate a shared secret using the mock Kyber algorithm.
-        
-        Args:
-            private_key: Recipient's private key
-            ciphertext: Encapsulated shared secret
-            
-        Returns:
-            Shared secret as bytes
-        """
         if len(private_key) != self.private_key_length:
             raise ValueError(f"Invalid private key length: expected {self.private_key_length}, got {len(private_key)}")
-        
         if len(ciphertext) != self.ciphertext_length:
             raise ValueError(f"Invalid ciphertext length: expected {self.ciphertext_length}, got {len(ciphertext)}")
-        
-        # In a real implementation, this would use the private key to recover the shared secret
-        # For mock, we derive a deterministic shared secret from the ciphertext and private key
-        
-        # Simple mock decapsulation: combine ciphertext and private key to derive shared secret
-        combined = ciphertext + private_key
-        hash_digest = hashlib.sha256(combined).digest()
-        
-        # Extract shared secret from hash
-        shared_secret = hash_digest[:self.shared_secret_length]
-        
-        logger.debug(f"Decapsulated shared secret: CT={len(ciphertext)} bytes, SS={len(shared_secret)} bytes")
+        shared_secret = hashlib.shake_256(ciphertext + private_key).digest(self.shared_secret_length)
         return shared_secret
 
     @property
