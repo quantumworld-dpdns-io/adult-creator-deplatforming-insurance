@@ -1237,3 +1237,5 @@
 # commit-090: add artifact archiving
 
 # commit-091: add flake8 configuration
+
+# commit-092: add mypy type checking config
