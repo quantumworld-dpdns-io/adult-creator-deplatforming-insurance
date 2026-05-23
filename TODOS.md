@@ -1215,3 +1215,5 @@
 # commit-077: add python 3.10 test matrix
 
 # commit-078: add python 3.11 test matrix
+
+# commit-079: add python 3.12 test matrix
