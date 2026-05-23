@@ -33,3 +33,5 @@ SOFTWARE.
 # commit-046: add pre-commit hook for json validation
 
 # commit-047: add pre-commit hook for toml validation
+
+# commit-048: add pre-commit hook for merge conflict check
