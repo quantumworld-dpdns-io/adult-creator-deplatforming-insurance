@@ -1209,3 +1209,5 @@
 # commit-069: add FUNDING.yml
 
 # commit-071: add SUPPORT.md
+
+# commit-074: configure GitHub Discussions
