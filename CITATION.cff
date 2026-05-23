@@ -16,3 +16,5 @@ keywords:
 license: MIT
 version: 1.0.0
 date-released: 2026-05-23
+
+# commit-010: add CITATION.cff for academic referencing
