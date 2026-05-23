@@ -1195,3 +1195,5 @@
 <!-- commit-059: add CI/CD workflows documentation -->
 
 <!-- commit-060: add testing documentation -->
+
+<!-- commit-062: create quantum/risk-scoring.md -->
