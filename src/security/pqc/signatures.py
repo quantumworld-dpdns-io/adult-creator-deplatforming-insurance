@@ -113,100 +113,34 @@ class MockDilithiumSignature(PQCSignature):
         self._signature_length = params["sig"]
 
     def generate_keypair(self) -> Tuple[bytes, bytes]:
-        """
-        Generate a mock Dilithium keypair.
-        
-        Returns:
-            Tuple of (public_key, private_key) as bytes
-        """
-        # Generate random keys of appropriate length
         public_key = os.urandom(self.public_key_length)
-        private_key = os.urandom(self.private_key_length)
-        
-        logger.debug(f"Generated keypair: PK={len(public_key)} bytes, SK={len(private_key)} bytes")
+        seed = hashlib.shake_256(public_key).digest(self.private_key_length)
+        # Derive private key deterministically from public key + extra random bytes
+        extra = os.urandom(self.private_key_length - len(seed))
+        private_key = seed + extra
+        private_key = private_key[:self.private_key_length]
+        logger.debug(f"Generated keypair: PK={len(public_key)}B, SK={len(private_key)}B")
         return public_key, private_key
 
     def sign(self, private_key: bytes, message: bytes) -> bytes:
-        """
-        Sign a message using the mock Dilithium algorithm.
-        
-        Args:
-            private_key: Signer's private key
-            message: Message to sign
-            
-        Returns:
-            Signature as bytes
-        """
         if len(private_key) != self.private_key_length:
             raise ValueError(f"Invalid private key length: expected {self.private_key_length}, got {len(private_key)}")
-        
-        # In a real implementation, this would involve lattice operations
-        # For mock, we create a deterministic signature based on the message and private key
-        
-        # Create signature by hashing message and private key with some randomness
-        hasher = hashlib.sha3_512()
-        hasher.update(private_key)
-        hasher.update(message)
-        # Add some deterministic "noise" based on the message content
-        for i, byte in enumerate(message):
-            hasher.update(bytes([byte ^ (i % 256)]))
-        
-        digest = hasher.digest()
-        
-        # Expand to desired signature length using a key derivation function approach
-        signature = bytearray()
-        counter = 0
-        while len(signature) < self.signature_length:
-            hasher.update(digest)
-            hasher.update(counter.to_bytes(4, 'little'))
-            signature.extend(hasher.digest())
-            counter += 1
-        
-        signature = bytes(signature[:self.signature_length])
-        
-        logger.debug(f"Signed message: MSG={len(message)} bytes, SIG={len(signature)} bytes")
+        seed = private_key[:32]
+        signature = hashlib.shake_256(seed + message).digest(self.signature_length)
+        logger.debug(f"Signed: MSG={len(message)}B, SIG={len(signature)}B")
         return signature
 
     def verify(self, public_key: bytes, message: bytes, signature: bytes) -> bool:
-        """
-        Verify a signature using the mock Dilithium algorithm.
-        
-        Args:
-            public_key: Signer's public key
-            message: Original message
-            signature: Signature to verify
-            
-        Returns:
-            True if signature is valid, False otherwise
-        """
         if len(public_key) != self.public_key_length:
             raise ValueError(f"Invalid public key length: expected {self.public_key_length}, got {len(public_key)}")
-        
         if len(signature) != self.signature_length:
             raise ValueError(f"Invalid signature length: expected {self.signature_length}, got {len(signature)}")
-        
-        # In a real implementation, this would verify the signature using lattice operations
-        # For mock, we reproduce the signing process and compare
-        
         try:
-            # Reproduce the signing process (should produce same signature if valid)
-            expected_signature = self.sign(public_key, message)  # Note: using public key as proxy for private in mock
-            
-            # In a real scheme, we'd use the public key to verify, not re-sign
-            # But for our mock, we'll do a simplified verification
-            hasher = hashlib.sha3_512()
-            hasher.update(public_key)
-            hasher.update(message)
-            for i, byte in enumerate(message):
-                hasher.update(bytes([byte ^ (i % 256)]))
-            
-            digest = hasher.digest()
-            
-            # Simple check: compare first few bytes (in real implementation, this would be more complex)
-            return signature[:16] == expected_signature[:16]
-            
+            seed = hashlib.shake_256(public_key).digest(32)
+            expected = hashlib.shake_256(seed + message).digest(self.signature_length)
+            return signature == expected
         except Exception as e:
-            logger.error(f"Error during signature verification: {e}")
+            logger.error(f"Verification error: {e}")
             return False
 
     @property
