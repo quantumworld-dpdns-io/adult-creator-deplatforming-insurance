@@ -1,0 +1,66 @@
+site_name: Adult Creator Deplatforming Insurance
+site_description: Quantum-powered insurance risk scoring with post-quantum cryptography
+site_author: quantumworld-dpdns-io
+site_url: https://quantumworld-dpdns-io.github.io/adult-creator-deplatforming-insurance
+
+repo_name: quantumworld-dpdns-io/adult-creator-deplatforming-insurance
+repo_url: https://github.com/quantumworld-dpdns-io/adult-creator-deplatforming-insurance
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Quantum Computing:
+    - Overview: quantum/overview.md
+    - Risk Scoring: quantum/risk-scoring.md
+    - Algorithms: quantum/algorithms.md
+    - Circuits: quantum/circuits.md
+  - Post-Quantum Cryptography:
+    - Overview: pqc/overview.md
+    - Key Encapsulation: pqc/kem.md
+    - Digital Signatures: pqc/signatures.md
+  - Security:
+    - Overview: security/overview.md
+    - OWASP Top 10: security/owasp-top10.md
+  - API Reference:
+    - Quantum Module: api/quantum.md
+    - Security Module: api/security.md
+  - CI/CD:
+    - Workflows: cicd/workflows.md
+    - Releases: cicd/releases.md
+  - Testing:
+    - Robot Framework: testing/robot-framework.md
+    - Test Cases: testing/test-cases.md
+  - Contributing: contributing.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.emoji
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/quantumworld-dpdns-io
