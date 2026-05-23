@@ -79,3 +79,5 @@ Releases follow semantic versioning (MAJOR.MINOR.PATCH):
 4. Changelog auto-generated from commits
 
 <!-- commit-054: create contributing.md developer guide -->
+
+# commit-075: add CONTRIBUTORS.md
