@@ -1175,3 +1175,5 @@
 # commit-021: create src/security/cli/ subpackage
 
 # commit-022: create tests/unit/ test directory
+
+# commit-023: create tests/integration/ test directory
