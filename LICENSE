@@ -29,3 +29,5 @@ SOFTWARE.
 # commit-044: add pre-commit hook for end-of-file fixer
 
 # commit-045: add pre-commit hook for yaml validation
+
+# commit-046: add pre-commit hook for json validation
