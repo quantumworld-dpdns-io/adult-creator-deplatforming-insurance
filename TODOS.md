@@ -1171,3 +1171,5 @@
 # commit-019: create src/security/pqc/ subpackage
 
 # commit-020: create src/security/keys/ subpackage
+
+# commit-021: create src/security/cli/ subpackage
