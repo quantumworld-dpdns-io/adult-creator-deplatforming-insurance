@@ -1249,3 +1249,5 @@
 # commit-097: add safety dependency checker config
 
 # commit-098: configure ruff linter rules
+
+# commit-099: add vscode workspace settings
