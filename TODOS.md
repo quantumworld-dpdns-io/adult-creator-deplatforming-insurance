@@ -1231,3 +1231,5 @@
 # commit-085: add formatting check with black
 
 # commit-086: add import sorting check with isort
+
+# commit-089: add dependency security scanning
