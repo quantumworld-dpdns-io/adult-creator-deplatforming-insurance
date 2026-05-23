@@ -1219,3 +1219,5 @@
 # commit-079: add python 3.12 test matrix
 
 # commit-080: configure dependency caching
+
+# commit-081: add pytest execution step
