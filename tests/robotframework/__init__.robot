@@ -11,3 +11,5 @@ Resource          resources/quantum_keywords.robot
 Resource          resources/security_keywords.robot
 
 # commit-024: create tests/robotframework/ test directory
+
+# commit-087: run robot framework tests in CI
