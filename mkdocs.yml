@@ -64,3 +64,5 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/quantumworld-dpdns-io
+
+# commit-009: configure mkdocs.yml for documentation site
