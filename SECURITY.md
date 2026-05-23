@@ -36,3 +36,5 @@ bandit -r src/
 # Check dependencies
 safety check -r requirements-quantum.txt
 ```
+
+<!-- commit-051: add SECURITY.md with vulnerability reporting -->
