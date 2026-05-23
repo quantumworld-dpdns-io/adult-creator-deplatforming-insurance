@@ -27,3 +27,5 @@ SOFTWARE.
 # commit-043: add pre-commit hook for trailing whitespace
 
 # commit-044: add pre-commit hook for end-of-file fixer
+
+# commit-045: add pre-commit hook for yaml validation
