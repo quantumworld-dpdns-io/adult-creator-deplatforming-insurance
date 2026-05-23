@@ -1229,3 +1229,5 @@
 # commit-084: add linting with flake8
 
 # commit-085: add formatting check with black
+
+# commit-086: add import sorting check with isort
