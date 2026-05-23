@@ -23,3 +23,5 @@ vendor/
 .env.*
 !.env.example
 scripts/auto_commit.sh
+
+# commit-002: add .gitignore for python, node, os files
