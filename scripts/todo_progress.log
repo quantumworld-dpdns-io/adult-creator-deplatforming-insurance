@@ -1,0 +1,7 @@
+001|chore|SUCCESS
+002|chore|SUCCESS
+003|chore|SUCCESS
+004|docs|SUCCESS
+005|chore|SUCCESS
+001|chore: initialize python project structure with src layout|SUCCESS
+002|chore: add .gitignore for python, node, os files|SUCCESS
