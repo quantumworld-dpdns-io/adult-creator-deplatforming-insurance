@@ -31,3 +31,5 @@ SOFTWARE.
 # commit-045: add pre-commit hook for yaml validation
 
 # commit-046: add pre-commit hook for json validation
+
+# commit-047: add pre-commit hook for toml validation
