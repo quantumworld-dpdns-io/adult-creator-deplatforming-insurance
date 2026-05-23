@@ -107,3 +107,5 @@ A05-Security Misconfiguration - CORS
     ${result}=    Check Security Misconfiguration    http://localhost:8080/
     Should Be True    not ${result['vulnerable']}    Permissive CORS detected
     Log    CORS test passed
+
+<!-- commit-061: add OWASP top 10 security reference -->
