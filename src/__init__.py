@@ -19,3 +19,5 @@
 # commit-037: add tests/__init__.py
 
 # commit-038: add tests/unit/__init__.py
+
+# commit-039: add tests/integration/__init__.py
