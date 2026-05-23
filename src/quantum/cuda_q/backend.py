@@ -51,3 +51,5 @@ class CUDABackend:
         logger.info("CUDA-Q backend shut down")
 
 # commit-015: create src/quantum/cuda_q/ subpackage
+
+# commit-031: add src/quantum/cuda_q/__init__.py with try/except
