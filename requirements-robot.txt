@@ -1,0 +1,4 @@
+# Robot Framework Dependencies
+robotframework>=6.0
+robotframework-requests>=0.9.0
+robotframework-library>=0.0.1

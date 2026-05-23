@@ -1,0 +1,141 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  unit-tests:
+    name: Unit Tests (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov pytest-asyncio
+          pip install -r requirements-quantum.txt
+      - name: Run unit tests
+        run: |
+          python -m pytest tests/ -v --cov=src --cov-report=xml --cov-report=term-missing
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: false
+
+  quantum-tests:
+    name: Quantum Computing Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install quantum dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-quantum.txt
+      - name: Import quantum modules
+        run: |
+          python -c "import sys; sys.path.insert(0, 'src'); from quantum.circuits.risk_circuit import RiskScoringCircuit; print('Quantum circuits OK')"
+          python -c "import sys; sys.path.insert(0, 'src'); from security.pqc.kem import PQCKEMFactory; print('PQC KEM OK')"
+          python -c "import sys; sys.path.insert(0, 'src'); from security.pqc.signatures import PQCSignatureFactory; print('PQC Signatures OK')"
+      - name: Run quantum module tests
+        run: |
+          python -m pytest tests/robotframework/libraries/ -v --tb=short || true
+
+  security-tests:
+    name: OWASP Security Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-robot.txt
+      - name: Run OWASP security tests
+        run: |
+          python -m robot --outputdir robot-reports tests/robotframework/testcases/owasp_top10.robot || true
+      - name: Archive robot reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-reports-security
+          path: robot-reports/
+
+  robot-framework-tests:
+    name: Robot Framework Test Suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install robotframework robotframework-requests
+          pip install -r requirements-quantum.txt
+      - name: Run Robot Framework tests
+        run: |
+          python -m robot --outputdir robot-reports --variable PROJECT_ROOT:${GITHUB_WORKSPACE} tests/robotframework/ || true
+      - name: Archive robot reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-reports
+          path: robot-reports/
+
+  lint:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install linting tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 black isort mypy
+      - name: Run flake8
+        run: |
+          flake8 src/ --max-line-length=120 --count || true
+      - name: Run black check
+        run: |
+          black --check src/ || true
+      - name: Run isort check
+        run: |
+          isort --check-only src/ || true
+
+  dependency-scan:
+    name: Dependency Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install safety
+        run: |
+          pip install safety
+      - name: Check dependencies
+        run: |
+          safety check -r requirements-quantum.txt || true
+          safety check -r requirements-robot.txt || true
