@@ -37,3 +37,5 @@ SOFTWARE.
 # commit-048: add pre-commit hook for merge conflict check
 
 # commit-049: add pre-commit hook for private key detection
+
+# commit-050: add pre-commit hook for python formatting (black)
