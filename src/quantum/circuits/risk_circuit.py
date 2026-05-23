@@ -190,3 +190,5 @@ if __name__ == "__main__":
     print(f"Number of Gates: {len(circuit_spec['gates'])}")
 
 # commit-012: create src/quantum/circuits/ subpackage
+
+# commit-028: add src/quantum/circuits/__init__.py
