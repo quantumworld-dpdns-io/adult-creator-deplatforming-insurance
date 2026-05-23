@@ -1197,3 +1197,5 @@
 <!-- commit-060: add testing documentation -->
 
 <!-- commit-062: create quantum/risk-scoring.md -->
+
+<!-- commit-063: create quantum/algorithms.md -->
