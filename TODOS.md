@@ -1173,3 +1173,5 @@
 # commit-020: create src/security/keys/ subpackage
 
 # commit-021: create src/security/cli/ subpackage
+
+# commit-022: create tests/unit/ test directory
