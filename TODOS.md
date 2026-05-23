@@ -1227,3 +1227,5 @@
 # commit-083: upload coverage to codecov
 
 # commit-084: add linting with flake8
+
+# commit-085: add formatting check with black
