@@ -192,3 +192,5 @@ if __name__ == "__main__":
 # commit-012: create src/quantum/circuits/ subpackage
 
 # commit-028: add src/quantum/circuits/__init__.py
+
+<!-- commit-064: create quantum/circuits.md -->
