@@ -23,3 +23,5 @@ SOFTWARE.
 # commit-003: create LICENSE (MIT)
 
 # commit-042: add .pre-commit-config.yaml with hooks
+
+# commit-043: add pre-commit hook for trailing whitespace
