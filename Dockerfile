@@ -1,4 +1,4 @@
-FROM python:3.11-slim AS builder
+FROM python:3.13-slim AS builder
 
 WORKDIR /build
 
@@ -13,7 +13,7 @@ RUN pip install --user --no-cache-dir -r requirements-quantum.txt
 COPY . .
 RUN pip install --user --no-cache-dir .
 
-FROM python:3.11-slim AS runner
+FROM python:3.13-slim AS runner
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
